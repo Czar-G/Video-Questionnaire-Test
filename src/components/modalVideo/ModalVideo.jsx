@@ -2,6 +2,9 @@ import { useEffect, useState } from "react"
 import "./modalVideo.css"
 import { Button, Box, Modal } from "@mui/material"
 import useVideoQuestion from "../../hooks/useVideoQuestion";
+import CardVideo from "../cardVideo/CardVideo";
+
+
 
 const ModalVideo = () => {
 
@@ -17,18 +20,28 @@ const ModalVideo = () => {
         p: 4,
     };
 
-    const [open, setOpen] = useState(false)
-    const handleOpen = () => setOpen(true)
-    const handleClose = () => setOpen(false)
-    const { dataVQ } = useVideoQuestion()
+    // let [nextOrSend, setNextOrSend] = useState(true)
+    let [indexMV, setIndexMV] = useState(0)
+    const { dataVQ, setDataVQ, open, handleClose, indexVQ } = useVideoQuestion()
 
     useEffect(() => {
-        console.log(dataVQ)
-    }, [])
+        // setTimeout(() => {
+        console.log(indexVQ.current)
+        // }, 4000)
+
+        let indexArray = dataVQ.findIndex((d) => d.id == indexVQ.current)
+        setIndexMV(indexArray)
+
+    }, [indexVQ.current])
+
+    const ccc = () => {
+        if (indexMV < dataVQ.length - 1) {
+            setIndexMV(indexMV + 1)
+        }
+    }
 
     return (
         <>
-            <Button onClick={handleOpen}>Open modal</Button>
             <Modal
                 open={open}
                 onClose={handleClose}
@@ -36,8 +49,15 @@ const ModalVideo = () => {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <div className="buttonClose">
+                    <div className="contentModal">
                         <Button onClick={handleClose}>:V Apachurrame {`<--`}</Button>
+
+                        <div className="contentVideo">
+                            dsds
+                        </div>
+                        <CardVideo dataVideo={dataVQ[indexMV]}></CardVideo>
+                        <Button onClick={ccc}>{dataVQ.every((el) => el.answered == true) ? 'Terminar' : 'Siguiente'}</Button>
+
                     </div>
                 </Box>
             </Modal>
